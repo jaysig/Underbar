@@ -302,10 +302,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    // var result;
-    // result = func.apply(this, arguments);
+    var storage = {};
 
-    //What is a expensive function
+      return function() {
+        var arg = JSON.stringify(arguments);
+        if (!storage[arg]) {
+          storage[arg] = func.apply(this, arguments);
+        }
+
+        return storage[arg];
+      };
+
+    //Keep reviewing expensive functions
 
   };
 
