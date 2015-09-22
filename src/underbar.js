@@ -188,12 +188,12 @@
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
     iterator = iterator || _.identity;
-    return _.reduce(collection, function(test, item){
-      if (!test){
-        return false;
-      }
-      return iterator(item);
-    },true);
+      return _.reduce(collection, function(test, item){
+        if (!test || item === undefined){
+          return false;
+        }
+        return test && Boolean(iterator(item));
+      },true);
   };
 
 
@@ -302,8 +302,11 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var result;
-    result = func.apply(this, arguments);
+    // var result;
+    // result = func.apply(this, arguments);
+
+    //What is a expensive function
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -313,13 +316,17 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
-    var time = 0;
-    while(time < wait){
-      time += 100;
-    }
-    return func();
+      setTimeout(function() {
+      func.apply(this, arguments);
+    }, wait);
   };
 
+  _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    setTimeout(function() {
+      func.apply(this, args);
+    }, wait);
+  };
 
   /**
    * ADVANCED COLLECTION OPERATIONS
@@ -336,7 +343,11 @@
     var org = array.slice();
     while(org.length>0){
       var ran = Math.floor(Math.random()*org.length);
-      result.push(org[ran]);
+      if (ran % 2 === 0){
+        result.push(org[ran]);
+      } else {
+        result.unshift(org[ran]);
+      }
       var index = org.splice(ran,1);
     }
     return result;
