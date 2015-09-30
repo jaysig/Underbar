@@ -395,6 +395,13 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    var sArray = nestedArray.join().split(",");
+      var nums = [];
+      _.each(sArray,function(item){
+        var num = Number(item);
+        nums.push(num);
+      });
+      return nums;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
